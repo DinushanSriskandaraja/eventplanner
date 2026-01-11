@@ -31,7 +31,7 @@ export const PROFESSIONALS: Record<string, Professional[]> = {
             rating: 4.9,
             reviewCount: 124,
             startingPrice: 1500,
-            currency: "$",
+            currency: "Rs. ",
             imageUrl: "https://images.unsplash.com/photo-1554048612-387768052bf7?auto=format&fit=crop&q=80&w=800",
             tagline: "Capturing moments that last a lifetime.",
             isVerified: true,

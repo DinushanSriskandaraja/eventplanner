@@ -103,6 +103,7 @@ export async function updateProviderProfile(formData: FormData) {
             image_url,
             years_of_experience,
             starting_price,
+            currency: 'Rs. ',
             social_media: socialMedia,
             updated_at: new Date().toISOString()
         })

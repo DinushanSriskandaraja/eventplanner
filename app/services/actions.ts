@@ -59,6 +59,7 @@ export async function getPublicProviders({ category, limit = 50 }: { category?: 
     return (data || []).map((p: any) => ({
         ...p,
         name: p.business_name,
+        currency: 'Rs. ', // Force Sri Lankan Rupees
         services: p.provider_services?.map((ps: any) => ps.services?.label) || []
     }))
 }
@@ -98,10 +99,14 @@ export async function getProviderPublicProfile(id: string) {
     return {
         ...providerData,
         name: providerData.business_name,
+        currency: 'Rs. ', // Force Sri Lankan Rupees
         portfolio: portfolio || [],
         services: providerData.provider_services?.map((ps: any) => ps.services?.label) || [],
         event_types: providerData.provider_event_types?.map((pet: any) => pet.event_types?.label) || [],
-        packages: providerData.provider_packages || []
+        packages: (providerData.provider_packages || []).map((pkg: any) => ({
+            ...pkg,
+            currency: 'Rs. ' // Force Sri Lankan Rupees for all packages
+        }))
     }
 }
 

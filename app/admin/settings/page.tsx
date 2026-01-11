@@ -13,8 +13,8 @@ export default function AdminSettingsPage() {
     const [generalSettings, setGeneralSettings] = useState({
         platformName: "EventPlanner",
         defaultLanguage: "en",
-        defaultCurrency: "USD",
-        timezone: "UTC",
+        defaultCurrency: "LKR", // Sri Lankan Rupees (Rs.)
+        timezone: "Asia/Colombo",
         primaryColor: "#4F46E5",
         secondaryColor: "#7C3AED",
     });
@@ -114,8 +114,8 @@ export default function AdminSettingsPage() {
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id)}
                             className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${activeTab === tab.id
-                                    ? "border-indigo-600 text-indigo-600"
-                                    : "border-transparent text-slate-600 hover:text-slate-900 hover:border-slate-300"
+                                ? "border-indigo-600 text-indigo-600"
+                                : "border-transparent text-slate-600 hover:text-slate-900 hover:border-slate-300"
                                 }`}
                         >
                             {tab.label}
@@ -161,18 +161,12 @@ export default function AdminSettingsPage() {
 
                             <div>
                                 <label className="block text-sm font-medium text-slate-700 mb-2">
-                                    Default Currency
+                                    Currency
                                 </label>
-                                <select
-                                    value={generalSettings.defaultCurrency}
-                                    onChange={(e) => setGeneralSettings({ ...generalSettings, defaultCurrency: e.target.value })}
-                                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-indigo-600 focus:ring-4 focus:ring-indigo-600/10 transition-all"
-                                >
-                                    <option value="USD">USD ($)</option>
-                                    <option value="EUR">EUR (€)</option>
-                                    <option value="GBP">GBP (£)</option>
-                                    <option value="INR">INR (₹)</option>
-                                </select>
+                                <div className="w-full px-4 py-3 bg-slate-100 border border-slate-200 rounded-xl text-slate-700 font-medium">
+                                    Sri Lankan Rupees (Rs.)
+                                </div>
+                                <p className="text-xs text-slate-500 mt-1">Platform is configured for Sri Lanka only</p>
                             </div>
 
                             <div>
@@ -184,10 +178,8 @@ export default function AdminSettingsPage() {
                                     onChange={(e) => setGeneralSettings({ ...generalSettings, timezone: e.target.value })}
                                     className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-indigo-600 focus:ring-4 focus:ring-indigo-600/10 transition-all"
                                 >
+                                    <option value="Asia/Colombo">Sri Lanka Standard Time (GMT+5:30)</option>
                                     <option value="UTC">UTC</option>
-                                    <option value="America/New_York">Eastern Time</option>
-                                    <option value="America/Los_Angeles">Pacific Time</option>
-                                    <option value="Asia/Kolkata">India Standard Time</option>
                                 </select>
                             </div>
 

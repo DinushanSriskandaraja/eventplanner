@@ -308,14 +308,18 @@ export default function ProviderProfilePage() {
                             />
                         </div>
                         <div className="space-y-2">
-                            <label className="text-sm font-semibold text-zinc-700">Starting Price</label>
-                            <input
-                                type="number"
-                                min="0"
-                                value={startingPrice}
-                                onChange={(e) => setStartingPrice(parseFloat(e.target.value) || 0)}
-                                className="w-full p-2.5 rounded-lg border border-zinc-200 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-sm"
-                            />
+                            <label className="text-sm font-semibold text-zinc-700">Starting Price (Rs.)</label>
+                            <div className="relative">
+                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 font-medium">Rs.</span>
+                                <input
+                                    type="number"
+                                    min="0"
+                                    value={startingPrice}
+                                    onChange={(e) => setStartingPrice(parseFloat(e.target.value) || 0)}
+                                    placeholder="15000"
+                                    className="w-full pl-12 pr-4 p-2.5 rounded-lg border border-zinc-200 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-sm"
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>

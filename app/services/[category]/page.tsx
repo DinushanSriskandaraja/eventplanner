@@ -36,7 +36,7 @@ export default function CategoryPage({ params }: { params: Promise<{ category: s
                 rating: p.rating || 0,
                 reviewCount: p.review_count || 0,
                 startingPrice: p.starting_price || 0,
-                currency: p.currency || '$',
+                currency: 'Rs. ',
                 imageUrl: p.image_url,
                 bannerUrl: p.banner_url,
                 profileUrl: p.image_url,

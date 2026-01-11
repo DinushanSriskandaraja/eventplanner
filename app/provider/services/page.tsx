@@ -14,7 +14,7 @@ const EVENT_TYPES = [
     "Other"
 ];
 
-const CURRENCIES = ["$", "€", "£", "₹", "¥"];
+const DEFAULT_CURRENCY = "Rs. "; // Sri Lankan Rupees
 
 export default function ProviderServicesPage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -27,7 +27,6 @@ export default function ProviderServicesPage() {
         description: "",
         eventTypes: [] as string[],
         price: "",
-        currency: "$",
         isActive: true,
     });
 
@@ -65,7 +64,7 @@ export default function ProviderServicesPage() {
         formData.append('name', packageForm.name);
         formData.append('description', packageForm.description);
         formData.append('price', packageForm.price);
-        formData.append('currency', packageForm.currency);
+        formData.append('currency', DEFAULT_CURRENCY);
         formData.append('isActive', String(packageForm.isActive));
         formData.append('eventTypes', JSON.stringify(packageForm.eventTypes));
 
@@ -85,7 +84,6 @@ export default function ProviderServicesPage() {
                     description: "",
                     eventTypes: [],
                     price: "",
-                    currency: "$",
                     isActive: true,
                 });
             }, 1500);
@@ -307,33 +305,24 @@ export default function ProviderServicesPage() {
                                 </div>
 
                                 {/* Price */}
-                                <div className="grid grid-cols-3 gap-4">
-                                    <div className="col-span-1">
-                                        <label className="block text-sm font-bold text-zinc-900 mb-2">Currency</label>
-                                        <select
-                                            value={packageForm.currency}
-                                            onChange={(e) => setPackageForm({ ...packageForm, currency: e.target.value })}
-                                            className="w-full px-4 py-3 bg-gradient-to-br from-zinc-50 to-slate-50 border-2 border-zinc-200 rounded-xl outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all"
-                                        >
-                                            {CURRENCIES.map((curr) => (
-                                                <option key={curr} value={curr}>{curr}</option>
-                                            ))}
-                                        </select>
-                                    </div>
-                                    <div className="col-span-2">
+                                <div>
+                                    <div>
                                         <label className="block text-sm font-bold text-zinc-900 mb-2">
-                                            Price <span className="text-red-500">*</span>
+                                            Price (Rs.) <span className="text-red-500">*</span>
                                         </label>
-                                        <input
-                                            type="number"
-                                            required
-                                            min="0"
-                                            step="0.01"
-                                            value={packageForm.price}
-                                            onChange={(e) => setPackageForm({ ...packageForm, price: e.target.value })}
-                                            placeholder="1500"
-                                            className="w-full px-4 py-3 bg-gradient-to-br from-zinc-50 to-slate-50 border-2 border-zinc-200 rounded-xl outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all"
-                                        />
+                                        <div className="relative">
+                                            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 font-medium">Rs.</span>
+                                            <input
+                                                type="number"
+                                                required
+                                                min="0"
+                                                step="0.01"
+                                                value={packageForm.price}
+                                                onChange={(e) => setPackageForm({ ...packageForm, price: e.target.value })}
+                                                placeholder="15000"
+                                                className="w-full pl-14 pr-4 py-3 bg-gradient-to-br from-zinc-50 to-slate-50 border-2 border-zinc-200 rounded-xl outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all"
+                                            />
+                                        </div>
                                     </div>
                                 </div>
 
