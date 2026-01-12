@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
     LayoutDashboard, Calendar, Briefcase, Users,
-    Settings, LogOut, Menu, X, Bell, CreditCard, Flag
+    Settings, LogOut, Menu, X, Bell, CreditCard, Flag, Loader2
 } from "lucide-react";
+import { createClient } from "@/utils/supabase/client";
+import { logout } from "@/app/actions/logout";
 
 export default function AdminLayout({
     children,
@@ -14,7 +16,43 @@ export default function AdminLayout({
     children: React.ReactNode;
 }) {
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [isVerifying, setIsVerifying] = useState(true);
+    const [userInfo, setUserInfo] = useState<{ name: string; email: string } | null>(null);
     const pathname = usePathname();
+    const router = useRouter();
+
+    // Verify admin role on mount
+    useEffect(() => {
+        const verifyAdminAccess = async () => {
+            const supabase = createClient();
+
+            const { data: { user } } = await supabase.auth.getUser();
+
+            if (!user) {
+                router.push('/login?redirectTo=' + pathname);
+                return;
+            }
+
+            const { data: profile } = await supabase
+                .from('profiles')
+                .select('role, full_name, email')
+                .eq('id', user.id)
+                .single();
+
+            if (!profile || profile.role !== 'admin') {
+                router.push('/unauthorized');
+                return;
+            }
+
+            setUserInfo({
+                name: profile.full_name || 'Admin',
+                email: profile.email || user.email || 'admin@eventplanner.com'
+            });
+            setIsVerifying(false);
+        };
+
+        verifyAdminAccess();
+    }, [pathname, router]);
 
     const navItems = [
         { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
@@ -25,6 +63,18 @@ export default function AdminLayout({
         { label: "Subscription Plans", href: "/admin/plans", icon: CreditCard },
         { label: "Settings", href: "/admin/settings", icon: Settings },
     ];
+
+    // Show loading state while verifying access
+    if (isVerifying) {
+        return (
+            <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+                <div className="text-center">
+                    <Loader2 className="w-8 h-8 text-indigo-600 animate-spin mx-auto mb-4" />
+                    <p className="text-slate-600">Verifying access...</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-slate-50 flex">
@@ -74,15 +124,21 @@ export default function AdminLayout({
                     <div className="p-4 border-t border-slate-800">
                         <div className="flex items-center gap-3 px-3 py-3">
                             <div className="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center text-xs font-bold">
-                                SA
+                                {userInfo?.name.charAt(0).toUpperCase() || 'A'}
                             </div>
                             <div className="flex-1 overflow-hidden">
-                                <p className="text-sm font-medium truncate">Super Admin</p>
-                                <p className="text-xs text-slate-500 truncate">admin@eventplanner.com</p>
+                                <p className="text-sm font-medium truncate">{userInfo?.name || 'Admin'}</p>
+                                <p className="text-xs text-slate-500 truncate">{userInfo?.email || 'Loading...'}</p>
                             </div>
-                            <button className="text-slate-400 hover:text-rose-400 transition-colors">
-                                <LogOut className="w-5 h-5" />
-                            </button>
+                            <form action={logout}>
+                                <button
+                                    type="submit"
+                                    className="text-slate-400 hover:text-rose-400 transition-colors"
+                                    title="Logout"
+                                >
+                                    <LogOut className="w-5 h-5" />
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>

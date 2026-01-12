@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
     LayoutDashboard, UserCircle, Briefcase, Image as ImageIcon,
-    MessageSquare, CreditCard, Settings, LogOut, Menu, X, Bell, Sparkles
+    MessageSquare, CreditCard, Settings, LogOut, Menu, X, Bell, Sparkles, Loader2
 } from "lucide-react";
+import { createClient } from "@/utils/supabase/client";
+import { logout } from "@/app/actions/logout";
 
 export default function ProviderLayout({
     children,
@@ -14,7 +16,52 @@ export default function ProviderLayout({
     children: React.ReactNode;
 }) {
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [isVerifying, setIsVerifying] = useState(true);
+    const [userInfo, setUserInfo] = useState<{ name: string; email: string; avatar?: string } | null>(null);
     const pathname = usePathname();
+    const router = useRouter();
+
+    // Verify provider role on mount
+    useEffect(() => {
+        const verifyProviderAccess = async () => {
+            const supabase = createClient();
+
+            const { data: { user } } = await supabase.auth.getUser();
+
+            if (!user) {
+                router.push('/login?redirectTo=' + pathname);
+                return;
+            }
+
+            const { data: profile } = await supabase
+                .from('profiles')
+                .select('role, full_name, email, avatar_url')
+                .eq('id', user.id)
+                .single();
+
+            if (!profile || profile.role !== 'provider') {
+                router.push('/unauthorized');
+                return;
+            }
+
+            // Fetch provider details
+            const { data: provider } = await supabase
+                .from('providers')
+                .select('business_name')
+                .eq('id', user.id)
+                .single();
+
+            setUserInfo({
+                name: provider?.business_name || profile.full_name || 'Provider',
+                email: profile.email || user.email || 'provider@example.com',
+                avatar: profile.avatar_url
+            });
+            setIsVerifying(false);
+        };
+
+
+        verifyProviderAccess();
+    }, [pathname, router]);
 
     const navItems = [
         { label: "Dashboard", href: "/provider", icon: LayoutDashboard },
@@ -25,6 +72,18 @@ export default function ProviderLayout({
         { label: "Subscription", href: "/provider/subscription", icon: CreditCard },
         { label: "Settings", href: "/provider/settings", icon: Settings },
     ];
+
+    // Show loading state while verifying access
+    if (isVerifying) {
+        return (
+            <div className="min-h-screen bg-zinc-50 flex items-center justify-center">
+                <div className="text-center">
+                    <Loader2 className="w-8 h-8 text-indigo-600 animate-spin mx-auto mb-4" />
+                    <p className="text-zinc-600">Verifying access...</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-zinc-50 flex font-sans">
@@ -95,12 +154,18 @@ export default function ProviderLayout({
                                 <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-zinc-900"></span>
                             </div>
                             <div className="flex-1 overflow-hidden">
-                                <p className="text-sm font-medium text-white truncate">Lens & Lights</p>
-                                <p className="text-xs text-zinc-500 truncate">provider@example.com</p>
+                                <p className="text-sm font-medium text-white truncate">{userInfo?.name || 'Provider'}</p>
+                                <p className="text-xs text-zinc-500 truncate">{userInfo?.email || 'Loading...'}</p>
                             </div>
-                            <button className="text-zinc-500 hover:text-rose-400 transition-colors">
-                                <LogOut className="w-5 h-5" />
-                            </button>
+                            <form action={logout}>
+                                <button
+                                    type="submit"
+                                    className="text-zinc-500 hover:text-rose-400 transition-colors"
+                                    title="Logout"
+                                >
+                                    <LogOut className="w-5 h-5" />
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>

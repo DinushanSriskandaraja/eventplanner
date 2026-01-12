@@ -37,14 +37,47 @@ export async function updateSession(request: NextRequest) {
         data: { user },
     } = await supabase.auth.getUser()
 
-    if (
-        !user &&
-        !request.nextUrl.pathname.startsWith('/login') &&
-        !request.nextUrl.pathname.startsWith('/auth')
-    ) {
-        // no user, potentially redirect to login but allow public access for now
-        // logic will be refined when we implement protected routes
+    const pathname = request.nextUrl.pathname
+
+    // Protected admin and provider panels - these are the ONLY routes that require authentication
+    const isAdminRoute = pathname.startsWith('/admin')
+    const isProviderRoute = pathname.startsWith('/provider')
+
+    // Only protect admin and provider panels
+    if (isAdminRoute || isProviderRoute) {
+        // If no user, redirect to login
+        if (!user) {
+            const url = request.nextUrl.clone()
+            url.pathname = '/login'
+            url.searchParams.set('redirectTo', pathname)
+            return NextResponse.redirect(url)
+        }
+
+        // Fetch user profile to get role
+        const { data: profile } = await supabase
+            .from('profiles')
+            .select('role')
+            .eq('id', user.id)
+            .single()
+
+        const userRole = profile?.role
+
+        // Protect admin routes - only admins can access
+        if (isAdminRoute && userRole !== 'admin') {
+            const url = request.nextUrl.clone()
+            url.pathname = '/unauthorized'
+            return NextResponse.redirect(url)
+        }
+
+        // Protect provider routes - only providers can access
+        if (isProviderRoute && userRole !== 'provider') {
+            const url = request.nextUrl.clone()
+            url.pathname = '/unauthorized'
+            return NextResponse.redirect(url)
+        }
     }
 
+    // All other routes are public - allow access
     return supabaseResponse
 }
+
