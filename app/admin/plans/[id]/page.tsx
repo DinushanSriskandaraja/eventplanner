@@ -58,19 +58,19 @@ export default function EditPlanPage({ params }: { params: Promise<{ id: string 
         }
 
         // Map backend snake_case to frontend state
-        const features = plan.features || {};
+        const features = (plan as any).features || {};
 
         setFormData({
-            name: plan.name,
-            description: plan.description || "",
-            status: plan.status === "Active",
-            price: String(plan.price),
-            billingCycle: plan.billing_cycle || "Monthly",
+            name: (plan as any).name,
+            description: (plan as any).description || "",
+            status: (plan as any).status === "Active",
+            price: String((plan as any).price),
+            billingCycle: (plan as any).billing_cycle || "Monthly",
             discountPrice: features.discount_price || "",
             trialPeriod: features.trial_period || "",
-            leadsPerMonth: String(plan.leads_per_month),
-            featured: plan.is_featured,
-            priority: plan.priority || "Normal",
+            leadsPerMonth: String((plan as any).leads_per_month),
+            featured: (plan as any).is_featured,
+            priority: (plan as any).priority || "Normal",
             showInRecommendations: features.show_in_recommendations || false,
             maxPortfolioUploads: features.max_portfolio_uploads || "",
             servicesAllowed: features.services_allowed || "",
@@ -78,7 +78,7 @@ export default function EditPlanPage({ params }: { params: Promise<{ id: string 
             analyticsAccess: features.analytics_access || false,
             prioritySupport: features.priority_support || false,
             customBadge: features.custom_badge || "None",
-            createdAt: plan.created_at
+            createdAt: (plan as any).created_at
         });
         setIsLoading(false);
     };
