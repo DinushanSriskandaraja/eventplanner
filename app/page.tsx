@@ -40,7 +40,7 @@ export default function Home() {
               <div className="w-8 h-8 bg-gradient-to-tr from-indigo-600 to-purple-600 rounded-lg flex items-center justify-center text-white">
                 <Sparkles className="w-4 h-4" />
               </div>
-              <span className="text-lg font-bold text-zinc-900">EventPlanner</span>
+              <span className="text-lg font-bold text-zinc-900">EsyEvent</span>
             </div>
 
             <div className="flex flex-wrap justify-center gap-8 text-sm font-medium text-zinc-500">
@@ -52,7 +52,7 @@ export default function Home() {
             </div>
 
             <div className="text-sm text-zinc-400">
-              © 2024 EventPlanner Inc.
+              © 2024 EsyEvent Inc.
             </div>
           </div>
         </div>

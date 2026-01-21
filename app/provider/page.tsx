@@ -45,7 +45,7 @@ function ProviderDashboardContent() {
                 <div className="bg-indigo-600 rounded-2xl p-6 md:p-8 text-white shadow-xl shadow-indigo-600/20 relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-16 -mt-32 blur-3xl pointer-events-none" />
                     <div className="relative z-10 max-w-2xl">
-                        <h2 className="text-2xl md:text-3xl font-bold mb-3">Welcome to EventPlanner! 🎉</h2>
+                        <h2 className="text-2xl md:text-3xl font-bold mb-3">Welcome to EsyEvent! 🎉</h2>
                         <p className="text-indigo-100 text-lg mb-6 leading-relaxed">
                             Your account has been created. To make your profile visible to thousands of potential clients, you need to complete your business profile and upload your portfolio.
                         </p>
@@ -129,8 +129,8 @@ function ProviderDashboardContent() {
                                         <td className="px-6 py-4 text-sm text-zinc-500">{new Date(row.created_at).toLocaleDateString()}</td>
                                         <td className="px-6 py-4">
                                             <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium border capitalize ${row.status === "new" ? "bg-indigo-50 text-indigo-700 border-indigo-100" :
-                                                    row.status === "responded" ? "bg-amber-50 text-amber-700 border-amber-100" :
-                                                        "bg-zinc-100 text-zinc-600 border-zinc-200"
+                                                row.status === "responded" ? "bg-amber-50 text-amber-700 border-amber-100" :
+                                                    "bg-zinc-100 text-zinc-600 border-zinc-200"
                                                 }`}>
                                                 {row.status === "new" && <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 animate-pulse" />}
                                                 {row.status}

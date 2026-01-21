@@ -11,7 +11,7 @@ export default function AdminSettingsPage() {
 
     // General Settings State
     const [generalSettings, setGeneralSettings] = useState({
-        platformName: "EventPlanner",
+        platformName: "EsyEvent",
         defaultLanguage: "en",
         defaultCurrency: "LKR", // Sri Lankan Rupees (Rs.)
         timezone: "Asia/Colombo",
@@ -53,7 +53,7 @@ export default function AdminSettingsPage() {
 
     // Notification Settings State
     const [notificationSettings, setNotificationSettings] = useState({
-        adminEmail: "admin@eventplanner.com",
+        adminEmail: "admin@esyevent.com",
         emailNotifications: true,
         providerEnquiryAlerts: true,
         subscriptionExpiryAlerts: true,

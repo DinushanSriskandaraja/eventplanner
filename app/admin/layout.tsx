@@ -46,7 +46,7 @@ export default function AdminLayout({
 
             setUserInfo({
                 name: profile.full_name || 'Admin',
-                email: profile.email || user.email || 'admin@eventplanner.com'
+                email: profile.email || user.email || 'admin@esyevent.com'
             });
             setIsVerifying(false);
         };

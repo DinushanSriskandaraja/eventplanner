@@ -59,7 +59,7 @@ export default function UnauthorizedPage() {
                         Need access to this area?
                     </p>
                     <a
-                        href="mailto:support@eventplanner.com"
+                        href="mailto:support@esyevent.com"
                         className="text-sm text-indigo-600 hover:text-indigo-700 font-medium flex items-center justify-center gap-1"
                     >
                         <Mail className="w-4 h-4" />

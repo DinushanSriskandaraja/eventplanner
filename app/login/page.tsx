@@ -45,7 +45,7 @@ export default function LoginPage() {
                                 <Hexagon className="w-6 h-6 text-white fill-current" />
                             </div>
                             <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
-                                EventPlanner
+                                EsyEvent
                             </span>
                         </Link>
                         <h1 className="text-2xl font-bold text-zinc-900 mb-2">Welcome Back</h1>

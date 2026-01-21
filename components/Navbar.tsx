@@ -46,7 +46,7 @@ export default function Navbar({ transparent = false }: NavbarProps) {
                             <Sparkles className="w-5 h-5" />
                         </div>
                         <span className={`text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-900 to-purple-800`}>
-                            EventPlanner
+                            EsyEvent
                         </span>
                     </Link>
 
